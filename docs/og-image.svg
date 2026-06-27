@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1120"/>
+      <stop offset="1" stop-color="#111a2e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#93c5fd"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="0%" r="70%">
+      <stop offset="0" stop-color="#3b82f6" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <text x="80" y="150" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="26" letter-spacing="3" fill="#3b82f6">OPEN-SOURCE · REINFORCEMENT LEARNING · REGTECH</text>
+  <text x="80" y="270" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="76" font-weight="700" fill="url(#accent)">Reinforcement Learning</text>
+  <text x="80" y="358" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="76" font-weight="700" fill="#ffffff">for AML Risk Scoring</text>
+  <text x="80" y="438" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="32" fill="#94a3b8">An RL agent that dynamically tunes anti-money-laundering</text>
+  <text x="80" y="482" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="32" fill="#94a3b8">risk weights per case — PPO · A2C · DQN.</text>
+  <g font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="26" fill="#e2e8f0">
+    <rect x="80" y="528" width="220" height="54" rx="27" fill="#111a2e" stroke="#1e2a44"/>
+    <text x="110" y="562">Gymnasium</text>
+    <rect x="320" y="528" width="280" height="54" rx="27" fill="#111a2e" stroke="#1e2a44"/>
+    <text x="350" y="562">Stable-Baselines3</text>
+    <rect x="620" y="528" width="150" height="54" rx="27" fill="#111a2e" stroke="#1e2a44"/>
+    <text x="650" y="562">FastAPI</text>
+    <rect x="790" y="528" width="130" height="54" rx="27" fill="#111a2e" stroke="#1e2a44"/>
+    <text x="820" y="562">React</text>
+  </g>
+  <circle cx="1010" cy="200" r="22" fill="url(#accent)"/>
+  <circle cx="930" cy="340" r="22" fill="#22c55e"/>
+  <circle cx="1090" cy="340" r="22" fill="#ef4444"/>
+  <path d="M1010 222 L930 318 M1010 222 L1090 318 M930 340 L1090 340" stroke="#3b82f6" stroke-width="4" fill="none" stroke-linecap="round"/>
+</svg>
