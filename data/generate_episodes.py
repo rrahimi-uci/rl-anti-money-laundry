@@ -1,8 +1,14 @@
 """Generate synthetic training episodes from AML scenarios.
 
-Reads the 4 predefined scenarios from the AML LangGraph project, applies
-random perturbations (turnover jitter, flag count variation, etc.), and
-writes JSONL episode files suitable for the RL environment.
+Reads the 4 predefined base scenarios, applies random perturbations (turnover
+jitter, flag count variation, etc.), and writes JSONL episode files suitable
+for the RL environment.
+
+The base scenarios are normally imported from the sibling AML LangGraph
+project (``../../aml-poc/aml-langgraph/scenarios.py``).  When that project is
+not present — i.e. when this repo is used stand-alone — a built-in fallback
+copy of the four scenarios is used instead, so episode generation always works
+out of the box.
 
 Usage:
     python -m data.generate_episodes --out data/episodes.jsonl --count 500
@@ -18,11 +24,21 @@ import random
 import sys
 from typing import Any, Dict, List
 
-# ── Import scenarios from sibling project ────────────────────────────────
+# ── Base scenarios ────────────────────────────────────────────────────────
+# Prefer the sibling AML LangGraph project when it is available so generated
+# data stays in sync with it; otherwise fall back to the built-in copy below.
 SCENARIOS_DIR = pathlib.Path(__file__).resolve().parents[2] / "aml-poc" / "aml-langgraph"
-sys.path.insert(0, str(SCENARIOS_DIR))
 
-from scenarios import SCENARIOS  # noqa: E402
+# Make both ``data.fallback_scenarios`` (run as module) and ``fallback_scenarios``
+# (run as a script) importable.
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+
+try:
+    sys.path.insert(0, str(SCENARIOS_DIR))
+    from scenarios import SCENARIOS  # type: ignore  # noqa: E402
+except Exception:  # pragma: no cover - exercised only when sibling repo absent
+    from fallback_scenarios import SCENARIOS  # noqa: E402
 
 # ── Ground-truth outcomes per scenario ───────────────────────────────────
 GROUND_TRUTH: Dict[str, str] = {

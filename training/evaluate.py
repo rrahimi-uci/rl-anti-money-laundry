@@ -39,6 +39,9 @@ def evaluate(
     action_counts: Counter = Counter()
     confusion: Counter = Counter()  # (predicted, ground_truth)
 
+    # Re-seed so the RL policy and the baseline are evaluated on the *same*
+    # sequence of sampled cases (a paired comparison).
+    env._rng = np.random.default_rng(config.seed)
     for _ in range(n_eval):
         obs, info = env.reset()
         action, _ = model.predict(obs, deterministic=True)
@@ -74,6 +77,7 @@ def evaluate(
     print(f"\n{'─'*60}")
     print("Baseline (fixed weights, no RL):")
     baseline_correct = 0
+    env._rng = np.random.default_rng(config.seed)  # same case sequence as RL
     for _ in range(n_eval):
         obs, info = env.reset()
         # Action 10 = NO_CHANGE (use default weights)

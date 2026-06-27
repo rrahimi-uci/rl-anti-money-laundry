@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ── Primary SEO ─────────────────────────────────────────────────── -->
+  <title>RL-Anti-Money-Laundry — Reinforcement Learning for AML Risk Scoring</title>
+  <meta name="description" content="An open-source proof of concept that uses reinforcement learning (PPO, A2C, DQN) to dynamically tune the risk-weighting parameters of an Anti-Money-Laundering (AML) decision pipeline, with a FastAPI backend and a React training dashboard." />
+  <meta name="keywords" content="reinforcement learning, anti money laundering, AML, risk scoring, PPO, A2C, DQN, Stable-Baselines3, Gymnasium, contextual bandit, machine learning, financial crime, RegTech, FastAPI, React" />
+  <meta name="author" content="rrahimi-uci" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#3b82f6" />
+  <link rel="canonical" href="https://rrahimi-uci.github.io/rl-anti-money-laundry/" />
+
+  <!-- ── Open Graph ──────────────────────────────────────────────────── -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="RL-Anti-Money-Laundry for AML Risk Scoring" />
+  <meta property="og:title" content="RL-Anti-Money-Laundry — Reinforcement Learning for AML Risk Scoring" />
+  <meta property="og:description" content="Reinforcement learning that dynamically tunes Anti-Money-Laundering risk weights per case — PPO/A2C/DQN, a Gymnasium environment, FastAPI backend, and a React training dashboard." />
+  <meta property="og:url" content="https://rrahimi-uci.github.io/rl-anti-money-laundry/" />
+  <meta property="og:image" content="https://rrahimi-uci.github.io/rl-anti-money-laundry/og-image.svg" />
+  <meta property="og:image:alt" content="RL-Anti-Money-Laundry: Reinforcement Learning for AML Risk Scoring" />
+
+  <!-- ── Twitter card ────────────────────────────────────────────────── -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="RL-Anti-Money-Laundry — Reinforcement Learning for AML Risk Scoring" />
+  <meta name="twitter:description" content="RL agent that learns to tune AML risk weights per case. PPO/A2C/DQN · Gymnasium · FastAPI · React." />
+  <meta name="twitter:image" content="https://rrahimi-uci.github.io/rl-anti-money-laundry/og-image.svg" />
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="sitemap" type="application/xml" href="sitemap.xml" />
+
+  <!-- ── Structured data (JSON-LD) ───────────────────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    "name": "RL-Anti-Money-Laundry — Reinforcement Learning for AML Risk Scoring",
+    "description": "A proof of concept that uses reinforcement learning (PPO, A2C, DQN) to dynamically tune the risk-weighting parameters of an Anti-Money-Laundering decision pipeline.",
+    "url": "https://rrahimi-uci.github.io/rl-anti-money-laundry/",
+    "codeRepository": "https://github.com/rrahimi-uci/rl-anti-money-laundry",
+    "programmingLanguage": ["Python", "TypeScript"],
+    "runtimePlatform": "Python 3.9+",
+    "keywords": "reinforcement learning, anti money laundering, AML, risk scoring, PPO, DQN, A2C, Gymnasium, Stable-Baselines3",
+    "license": "https://github.com/rrahimi-uci/rl-anti-money-laundry",
+    "author": { "@type": "Person", "name": "rrahimi-uci" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What does RL-Anti-Money-Laundry do?",
+        "acceptedAnswer": { "@type": "Answer", "text": "It trains a reinforcement-learning agent to adjust the weights and threshold of an AML risk-scoring rule per case, learning from ground-truth labels or analyst human-in-the-loop feedback, instead of using fixed hand-tuned weights." }
+      },
+      {
+        "@type": "Question",
+        "name": "Which RL algorithms are supported?",
+        "acceptedAnswer": { "@type": "Answer", "text": "PPO, A2C, and DQN via Stable-Baselines3, on a custom Gymnasium contextual-bandit environment." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is RL-Anti-Money-Laundry production-ready for AML compliance?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. It is an educational proof of concept and is not a compliant, audited AML control." }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root{
+      --bg:#0b1120; --panel:#111a2e; --panel2:#0f1729; --border:#1e2a44;
+      --text:#e2e8f0; --muted:#94a3b8; --accent:#3b82f6; --accent2:#6366f1;
+      --green:#22c55e; --red:#ef4444; --radius:14px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+    header.hero{padding:88px 0 64px;text-align:center;
+      background:radial-gradient(1200px 500px at 50% -10%,rgba(59,130,246,.18),transparent 70%)}
+    .badge{display:inline-block;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--accent);border:1px solid var(--border);border-radius:999px;padding:6px 14px;margin-bottom:22px;background:var(--panel)}
+    h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.1;margin:0 0 18px;
+      background:linear-gradient(135deg,#fff,#93c5fd);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .sub{font-size:clamp(1.05rem,2.4vw,1.3rem);color:var(--muted);max-width:760px;margin:0 auto 30px}
+    .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+    .btn{display:inline-block;padding:12px 24px;border-radius:10px;font-weight:600;border:1px solid var(--border)}
+    .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none}
+    .btn.primary:hover,.btn:hover{text-decoration:none;transform:translateY(-1px)}
+    .btn{transition:transform .15s ease}
+    .btn.ghost{background:var(--panel);color:var(--text)}
+    section{padding:54px 0;border-top:1px solid var(--border)}
+    h2{font-size:1.7rem;margin:0 0 8px}
+    .lead{color:var(--muted);margin:0 0 28px;max-width:760px}
+    .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+    .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
+    .card h3{margin:0 0 8px;font-size:1.12rem}
+    .card p{margin:0;color:var(--muted);font-size:.96rem}
+    .pill{display:inline-block;font-size:.82rem;color:var(--muted);background:var(--panel2);
+      border:1px solid var(--border);border-radius:999px;padding:4px 12px;margin:4px 6px 4px 0}
+    pre{background:#060a14;border:1px solid var(--border);border-radius:12px;padding:18px;overflow:auto;font-size:.9rem}
+    code{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px}
+    .stat{text-align:center;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
+    .stat .n{font-size:2rem;font-weight:700;color:var(--accent)}
+    .stat .l{color:var(--muted);font-size:.9rem}
+    table{width:100%;border-collapse:collapse;font-size:.94rem}
+    th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border)}
+    th{color:var(--muted);font-weight:600}
+    .note{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.35);border-radius:12px;padding:16px 18px;color:#fecaca}
+    footer{padding:40px 0;border-top:1px solid var(--border);color:var(--muted);text-align:center;font-size:.9rem}
+    ul.clean{padding-left:18px;color:var(--muted)}
+    ul.clean li{margin:6px 0}
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <span class="badge">Open-source · Reinforcement Learning · RegTech</span>
+      <h1>Reinforcement Learning for AML Risk Scoring</h1>
+      <p class="sub">
+        An RL agent learns to <strong>dynamically tune the risk weights and threshold</strong>
+        of an Anti-Money-Laundering decision pipeline — per case — instead of relying on
+        fixed, hand-tuned parameters.
+      </p>
+      <div class="cta">
+        <a class="btn primary" href="https://github.com/rrahimi-uci/rl-anti-money-laundry">View on GitHub</a>
+        <a class="btn ghost" href="#quickstart">Quick start</a>
+        <a class="btn ghost" href="https://github.com/rrahimi-uci/rl-anti-money-laundry/blob/main/ARCHITECTURE.md">Architecture</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="overview" style="border-top:none">
+      <h2>What it does</h2>
+      <p class="lead">
+        Traditional AML scoring engines apply static weights to risk factors (PEP status,
+        suspicious-activity flags, turnover, adverse media) and compare the total to a fixed
+        threshold. RL-Anti-Money-Laundry reframes weight tuning as a <strong>single-step contextual bandit</strong>
+        and trains an agent (PPO / A2C / DQN) to adjust those weights case-by-case, learning from
+        ground-truth labels or analyst human-in-the-loop feedback.
+      </p>
+      <div class="stats">
+        <div class="stat"><div class="n">24</div><div class="l">state features</div></div>
+        <div class="stat"><div class="n">19</div><div class="l">discrete actions</div></div>
+        <div class="stat"><div class="n">3</div><div class="l">RL algorithms</div></div>
+        <div class="stat"><div class="n">99</div><div class="l">passing tests</div></div>
+      </div>
+    </section>
+
+    <section id="features">
+      <h2>Features</h2>
+      <div class="grid">
+        <div class="card"><h3>🎯 Adaptive scoring</h3><p>An RL policy nudges weights and the decision threshold per case, clamped to safe bounds.</p></div>
+        <div class="card"><h3>🧠 Multiple algorithms</h3><p>PPO, A2C, and DQN via Stable-Baselines3 on a custom Gymnasium environment.</p></div>
+        <div class="card"><h3>📊 Live dashboard</h3><p>React + TypeScript UI with real-time accuracy/reward curves, evaluation, and data tooling.</p></div>
+        <div class="card"><h3>🔍 Hyperparameter tuning</h3><p>Grid, random, and a TPE-inspired Bayesian optimizer with parallel trials.</p></div>
+        <div class="card"><h3>🔌 Drop-in integration</h3><p>An adaptive decision node that replaces a fixed-weight LangGraph pipeline step.</p></div>
+        <div class="card"><h3>⚖️ Paired evaluation</h3><p>Fair RL-vs-fixed-weights comparison on an identical, re-seeded case sequence.</p></div>
+      </div>
+    </section>
+
+    <section id="formulation">
+      <h2>The RL formulation</h2>
+      <p class="lead">A one-step contextual bandit: observe a case, pick a weight adjustment, score it, receive a reward, terminate.</p>
+      <table>
+        <thead><tr><th>Element</th><th>Definition</th></tr></thead>
+        <tbody>
+          <tr><td><strong>State</strong></td><td>24-dim vector: LOB &amp; reason-code one-hots, red-flag counts by severity, PEP/sanctions flags, normalised turnover, adverse media, transaction ratios, account age, prior alerts/SARs.</td></tr>
+          <tr><td><strong>Action</strong></td><td>19 discrete weight/threshold nudges (single step, double-step "BIG" variants, or no-op).</td></tr>
+          <tr><td><strong>Reward</strong></td><td>+1.0 correct suspicious/escalated · +0.5 efficient non-suspicious · −0.5 missed escalation · −1.0 wrong; or HITL gate feedback online.</td></tr>
+          <tr><td><strong>Episode</strong></td><td>Single step — one action per AML case.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="quickstart">
+      <h2>Quick start</h2>
+      <p class="lead">One script creates a venv, installs dependencies, and launches the backend (:8200) and dashboard (:4003).</p>
+      <pre><code>git clone https://github.com/rrahimi-uci/rl-anti-money-laundry.git
+cd rl-anti-money-laundry
+bash start.sh</code></pre>
+      <h3 style="margin-top:26px">Train &amp; evaluate from the CLI</h3>
+      <pre><code># Generate synthetic episodes (self-contained)
+python -m data.generate_episodes --out data/episodes.jsonl --count 2000
+
+# Train a PPO agent
+python -m training.train --episodes data/episodes.jsonl --timesteps 50000
+
+# Evaluate against the fixed-weight baseline (paired)
+python -m training.evaluate --model models/aml_ppo --n-eval 200</code></pre>
+    </section>
+
+    <section id="stack">
+      <h2>Tech stack</h2>
+      <div>
+        <span class="pill">Python 3.9+</span>
+        <span class="pill">Gymnasium</span>
+        <span class="pill">Stable-Baselines3</span>
+        <span class="pill">PyTorch</span>
+        <span class="pill">FastAPI</span>
+        <span class="pill">Uvicorn</span>
+        <span class="pill">NumPy</span>
+        <span class="pill">Pandas</span>
+        <span class="pill">Matplotlib</span>
+        <span class="pill">React 19</span>
+        <span class="pill">TypeScript</span>
+        <span class="pill">Vite</span>
+        <span class="pill">Tailwind CSS</span>
+        <span class="pill">Recharts</span>
+        <span class="pill">pytest</span>
+      </div>
+    </section>
+
+    <section id="disclaimer">
+      <h2>Disclaimer</h2>
+      <p class="note">
+        ⚠️ This is an educational proof of concept that demonstrates a technique. It is
+        <strong>not</strong> a compliant, audited Anti-Money-Laundering control and must not be
+        used to make real financial-crime decisions.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p>
+        <a href="https://github.com/rrahimi-uci/rl-anti-money-laundry">GitHub repository</a> ·
+        <a href="https://github.com/rrahimi-uci/rl-anti-money-laundry/blob/main/ARCHITECTURE.md">Architecture</a> ·
+        <a href="https://github.com/rrahimi-uci/rl-anti-money-laundry/blob/main/README.md">README</a>
+      </p>
+      <p>RL-Anti-Money-Laundry — Reinforcement Learning for AML Risk Scoring · Open source</p>
+    </div>
+  </footer>
+</body>
+</html>

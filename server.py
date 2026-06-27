@@ -61,9 +61,17 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI(title="RL Training Dashboard", version="1.0.0")
 
+# The Vite dev server proxies ``/api`` to this backend, so same-origin requests
+# normally don't need CORS. These origins cover direct browser access to the
+# backend during development (the UI runs on :4003 — see ui/vite.config.ts).
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:5173", "http://localhost:4000"],
+    allow_origins=[
+        "http://localhost:4003",
+        "http://127.0.0.1:4003",
+        "http://localhost:5173",
+        "http://localhost:3000",
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -572,6 +580,8 @@ def run_evaluation(req: EvalRequest):
     confusion: List[Dict[str, Any]] = []
     per_episode: List[Dict[str, Any]] = []
 
+    # Re-seed so the RL policy and the baseline see the same sampled cases.
+    env._rng = np.random.default_rng(config.seed)
     for _ in range(req.n_eval):
         obs, info = env.reset()
         action, _ = model.predict(obs, deterministic=True)
@@ -597,8 +607,9 @@ def run_evaluation(req: EvalRequest):
 
     accuracy = correct / total if total else 0
 
-    # Baseline
+    # Baseline (same sampled-case sequence as the RL loop above)
     baseline_correct = 0
+    env._rng = np.random.default_rng(config.seed)
     for _ in range(req.n_eval):
         obs, info = env.reset()
         _, _, _, _, step_info = env.step(10)  # NO_CHANGE

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rrahimi-uci.github.io/rl-anti-money-laundry/sitemap.xml
