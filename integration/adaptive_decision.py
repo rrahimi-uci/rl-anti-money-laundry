@@ -44,6 +44,25 @@ def _use_rl() -> bool:
     return os.environ.get("USE_RL_POLICY", "false").lower() in ("true", "1", "yes")
 
 
+def _make_message(content: str):
+    """Build a LangChain ``HumanMessage`` when available, else a light stand-in.
+
+    The node is designed as a drop-in for a LangGraph pipeline, where messages
+    are ``langchain_core`` objects.  When ``langchain_core`` is not installed
+    (e.g. running this repo stand-alone), we fall back to a minimal object that
+    exposes the same ``content`` attribute so the node stays importable and
+    testable without the heavy dependency.
+    """
+    try:
+        from langchain_core.messages import HumanMessage
+
+        return HumanMessage(content=content)
+    except Exception:  # pragma: no cover - depends on optional dependency
+        from types import SimpleNamespace
+
+        return SimpleNamespace(type="human", content=content)
+
+
 def adaptive_decision_node(state: dict) -> dict:
     """Drop-in replacement for ``decision_node`` with RL-adaptive weights.
 
@@ -51,9 +70,6 @@ def adaptive_decision_node(state: dict) -> dict:
     best weight adjustment action for this case, and applies it before scoring.
     Otherwise falls back to the fixed ``DefaultWeights``.
     """
-
-    # Late import to avoid circular dependency when used inside the AML project
-    from langchain_core.messages import HumanMessage
 
     red_flags = state.get("red_flags", [])
     pep = state.get("pep_status", "CLEAR")
@@ -200,5 +216,5 @@ def adaptive_decision_node(state: dict) -> dict:
         "decision_details": decision_details,
         "current_stage": "decision_node",
         "stage_history": state.get("stage_history", []) + ["decision_node"],
-        "messages": [HumanMessage(content=log_msg)],
+        "messages": [_make_message(log_msg)],
     }
