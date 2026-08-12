@@ -9,6 +9,10 @@
 📖 **Project site:** <https://rrahimi-uci.github.io/rl-anti-money-laundry/> &nbsp;·&nbsp;
 🏗️ **Architecture:** [ARCHITECTURE.md](ARCHITECTURE.md)
 
+**Release:** `aml-v0.0.1` — an educational, reproducible AML risk-scoring prototype
+with PPO/A2C/DQN training, paired evaluation, a FastAPI backend, React dashboard, and
+99-test suite.
+
 > ⚠️ **Disclaimer:** This is an educational proof of concept. It is **not** a
 > compliant, audited AML control and must not be used to make real
 > financial-crime decisions.
