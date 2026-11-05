@@ -1,13 +1,21 @@
 ## Summary
 
-Describe what this PR changes and why.
+<!-- What changed and why? Link the issue or ticket. -->
 
-## Testing
+## Tests and validation
 
-How was this tested?
+- [ ] Added or updated tests for changed behavior, or explained why tests are not applicable.
+- [ ] Ran applicable Python test and publication checks and recorded exact commands/results below.
+- [ ] Ran `git diff --check`.
+- [ ] Checked for secrets and unrelated changes.
 
-## Checklist
+Validation commands and results:
 
-- [ ] Tests added/updated for behavior changes
-- [ ] Docs updated if needed
-- [ ] Linked related issue(s)
+## Risks and follow-up
+
+<!-- State risks, limitations, migrations, deployment implications, and rollback notes. -->
+
+## Copilot handoff
+
+- [ ] This PR is ready for human review only after all applicable validation passes.
+- [ ] Copilot did not approve or merge this PR.
